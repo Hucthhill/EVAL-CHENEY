@@ -2,8 +2,9 @@ import React from 'react';
 import { useEvaluation } from '../store/EvaluationContext';
 import { SkillRadar } from '../components/charts/SkillRadar';
 import type { ThemeEvaluation } from '../types';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-// Duplicating THEMES for now, ideally should be shared constant
 const THEMES = [
     {
         id: 'communication',
@@ -83,6 +84,7 @@ const ALL_THEMES = [
 
 export const BookletPage: React.FC = () => {
     const { data } = useEvaluation();
+    const navigate = useNavigate();
 
     const getChartData = (themeId: string, phase: 'phase1' | 'phase2' | 'phase3') => {
         const theme = ALL_THEMES.find(t => t.id === themeId);
@@ -105,7 +107,17 @@ export const BookletPage: React.FC = () => {
     };
 
     return (
-        <div className="max-w-[21cm] mx-auto bg-white print:max-w-none">
+        <div className="max-w-[210mm] mx-auto bg-white p-8 print:p-0 min-h-screen">
+            <div className="print:hidden mb-8">
+                <button
+                    onClick={() => navigate('/')}
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                    <ArrowLeft size={20} />
+                    Retour au tableau de bord
+                </button>
+            </div>
+
             {/* Cover Page */}
             <div className="min-h-[29.7cm] p-12 border-b-2 border-gray-100 print:border-none relative page-break-after">
                 <div className="text-center mb-16">

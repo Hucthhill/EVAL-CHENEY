@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { EvaluationForm } from '../components/EvaluationForm';
 import { SkillRadar } from '../components/charts/SkillRadar';
 import { useEvaluation } from '../store/EvaluationContext';
+import { IdentityTab } from '../components/IdentityTab';
 import type { ThemeEvaluation } from '../types';
 
 const THEMES = [
@@ -85,24 +86,34 @@ const ALL_THEMES = [
 
 export const EvaluationPage: React.FC = () => {
     const { data, updateObservation } = useEvaluation();
-    const [activeTheme, setActiveTheme] = useState<typeof ALL_THEMES[number]['id']>('communication');
+    const [activeTheme, setActiveTheme] = useState<typeof ALL_THEMES[number]['id'] | 'identity'>('identity');
 
-    const currentTheme = ALL_THEMES.find(t => t.id === activeTheme)!;
-    const themeData = data.evaluations[activeTheme] as ThemeEvaluation;
+    const currentTheme = ALL_THEMES.find(t => t.id === activeTheme);
+    const themeData = activeTheme !== 'identity' ? (data.evaluations[activeTheme] as ThemeEvaluation) : null;
 
     const getChartData = (phase: 'phase1' | 'phase2' | 'phase3') => {
-        return currentTheme.subThemes.map(sub => themeData[sub.id]?.[phase]?.value || 0);
+        if (!currentTheme || activeTheme === 'identity') return [];
+        return currentTheme.subThemes.map(sub => themeData?.[sub.id]?.[phase]?.value || 0);
     };
 
     return (
         <div className="space-y-8">
             <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <button
+                    onClick={() => setActiveTheme('identity')}
+                    className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${activeTheme === 'identity'
+                        ? 'bg-bottle-green text-white shadow-md transform scale-105'
+                        : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                        }`}
+                >
+                    Identité
+                </button>
                 {ALL_THEMES.map(theme => (
                     <button
                         key={theme.id}
                         onClick={() => setActiveTheme(theme.id as any)}
                         className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${activeTheme === theme.id
-                            ? 'bg-black text-white shadow-md transform scale-105'
+                            ? 'bg-bottle-green text-white shadow-md transform scale-105'
                             : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                             }`}
                     >
@@ -111,42 +122,49 @@ export const EvaluationPage: React.FC = () => {
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2">
-                    <EvaluationForm
-                        themeId={activeTheme}
-                        title={currentTheme.title}
-                        subThemes={currentTheme.subThemes}
-                    />
-                </div>
+            {activeTheme === 'identity' ? (
+                <IdentityTab />
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2">
+                        <EvaluationForm
+                            themeId={activeTheme}
+                            title={currentTheme!.title}
+                            subThemes={currentTheme!.subThemes}
+                        />
+                    </div>
 
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit sticky top-24">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6">Visualisation</h3>
-                    <SkillRadar
-                        labels={currentTheme.subThemes.map(s => s.label)}
-                        dataPhase1={getChartData('phase1')}
-                        dataPhase2={getChartData('phase2')}
-                        dataPhase3={getChartData('phase3')}
-                    />
-                    <div className="mt-8 space-y-3">
-                        <div className="flex items-center gap-3 p-2 rounded-lg bg-yellow-50 border border-yellow-100">
-                            <span className="w-3 h-3 rounded-full bg-yellow-500 shadow-sm"></span>
-                            <span className="text-sm font-medium text-yellow-900">Phase 1: Stage découverte</span>
-                        </div>
-                        <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-100">
-                            <span className="w-3 h-3 rounded-full bg-green-500 shadow-sm"></span>
-                            <span className="text-sm font-medium text-green-900">Phase 2: Approfondissement</span>
-                        </div>
-                        <div className="flex items-center gap-3 p-2 rounded-lg bg-red-50 border border-red-100">
-                            <span className="w-3 h-3 rounded-full bg-red-500 shadow-sm"></span>
-                            <span className="text-sm font-medium text-red-900">Phase 3: Bilan final</span>
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit sticky top-24">
+                        <h3 className="text-lg font-bold text-gray-900 mb-6">Visualisation</h3>
+                        <SkillRadar
+                            labels={currentTheme!.subThemes.map(s => s.label)}
+                            dataPhase1={getChartData('phase1')}
+                            dataPhase2={getChartData('phase2')}
+                            dataPhase3={getChartData('phase3')}
+                        />
+                        <div className="mt-8 space-y-3">
+                            <div className="flex items-center gap-3 p-2 rounded-lg bg-yellow-50 border border-yellow-100">
+                                <span className="w-3 h-3 rounded-full bg-yellow-500 shadow-sm"></span>
+                                <span className="text-sm font-medium text-yellow-900">Phase 1: Stage découverte</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-100">
+                                <span className="w-3 h-3 rounded-full bg-green-500 shadow-sm"></span>
+                                <span className="text-sm font-medium text-green-900">Phase 2: Approfondissement</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-2 rounded-lg bg-red-50 border border-red-100">
+                                <span className="w-3 h-3 rounded-full bg-red-500 shadow-sm"></span>
+                                <span className="text-sm font-medium text-red-900">Phase 3: Bilan final</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
-            {/* Observations Section */}
-            {/* Observations Section */}
+            {/* Observations Section - Always visible or only on theme tabs? Usually global, but maybe better inside tabs? 
+                The user didn't specify, but typically observations are global per evaluation or per theme. 
+                The current data model has global observations per phase. 
+                I'll keep it at the bottom for now.
+            */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-6">Observations Générales (Par Phase)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -160,7 +178,7 @@ export const EvaluationPage: React.FC = () => {
                             <textarea
                                 value={data.observations[phase] || ''}
                                 onChange={(e) => updateObservation(phase, e.target.value)}
-                                className="w-full h-40 p-4 border-0 bg-gray-50 rounded-xl focus:ring-2 focus:ring-black focus:bg-white transition-all outline-none resize-none text-sm leading-relaxed"
+                                className="w-full h-40 p-4 border-0 bg-gray-50 rounded-xl focus:ring-2 focus:ring-bottle-green focus:bg-white transition-all outline-none resize-none text-sm leading-relaxed"
                                 placeholder={`Saisissez vos observations pour la ${phase === 'phase1' ? 'première phase' : phase === 'phase2' ? 'deuxième phase' : 'troisième phase'}...`}
                             />
                         </div>
