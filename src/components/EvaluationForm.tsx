@@ -98,7 +98,7 @@ export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, 
                     {/* Phase Indicators */}
                     <div className="flex gap-3 text-sm">
                         {phases.map(p => {
-                            const { isValidated, isActive } = getPhaseStatus(p.id);
+                            const { isValidated } = getPhaseStatus(p.id);
                             return (
                                 <span key={p.id} className={clsx(
                                     "flex items-center gap-2 px-3 py-1 rounded-full border transition-colors",
