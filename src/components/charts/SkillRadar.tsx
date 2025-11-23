@@ -27,6 +27,53 @@ interface SkillRadarProps {
     title?: string;
 }
 
+// Custom plugin to draw background zones
+const backgroundZonesPlugin = {
+    id: 'backgroundZones',
+    beforeDraw: (chart: any) => {
+        const { ctx, scales: { r } } = chart;
+        const xCenter = r.xCenter;
+        const yCenter = r.yCenter;
+
+        // Helper to draw a circle
+        const drawZone = (radius: number, color: string) => {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(xCenter, yCenter, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        };
+
+        // Draw zones from outside in
+        // Zone 6-7 (Green)
+        drawZone(r.getDistanceFromCenterForValue(7), 'rgba(34, 197, 94, 0.1)'); // Green-500 light
+        // Zone 3-6 (Yellow)
+        drawZone(r.getDistanceFromCenterForValue(6), 'rgba(234, 179, 8, 0.1)'); // Yellow-500 light
+        // Zone 0-3 (Orange)
+        drawZone(r.getDistanceFromCenterForValue(3), 'rgba(249, 115, 22, 0.1)'); // Orange-500 light
+    }
+};
+
+// Helper to wrap text
+const wrapText = (str: string, maxLen: number = 20) => {
+    if (str.length <= maxLen) return str;
+    const words = str.split(' ');
+    const lines = [];
+    let currentLine = words[0];
+
+    for (let i = 1; i < words.length; i++) {
+        if (currentLine.length + 1 + words[i].length <= maxLen) {
+            currentLine += ' ' + words[i];
+        } else {
+            lines.push(currentLine);
+            currentLine = words[i];
+        }
+    }
+    lines.push(currentLine);
+    return lines;
+};
+
 export const SkillRadar: React.FC<SkillRadarProps> = ({
     labels,
     dataPhase1 = [],
@@ -34,8 +81,10 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
     dataPhase3 = [],
     title,
 }) => {
+    const wrappedLabels = labels.map(l => wrapText(l));
+
     const data = {
-        labels,
+        labels: wrappedLabels,
         datasets: [
             {
                 label: 'Phase 1',
@@ -71,8 +120,12 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
                 max: 7,
                 ticks: {
                     stepSize: 1,
-                    display: true, // Show numbers
+                    display: true,
                     backdropColor: 'transparent',
+                    font: {
+                        size: 10,
+                        weight: 'bold' as const
+                    }
                 },
                 grid: {
                     color: 'rgba(0, 0, 0, 0.1)',
@@ -84,6 +137,8 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
                     font: {
                         size: 11,
                     },
+                    // Ensure labels don't get cut off
+                    padding: 10
                 },
             },
         },
@@ -95,13 +150,18 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
                 display: !!title,
                 text: title,
             },
+            // Register custom plugin
+            backgroundZones: {},
         },
         maintainAspectRatio: false,
+        layout: {
+            padding: 10
+        }
     };
 
     return (
-        <div className="w-full h-[300px] md:h-[400px]">
-            <Radar data={data} options={options} />
+        <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center">
+            <Radar data={data} options={options} plugins={[backgroundZonesPlugin]} />
         </div>
     );
 };

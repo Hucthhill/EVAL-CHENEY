@@ -113,27 +113,38 @@ export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, 
                 </div>
 
                 {/* Scoring Legend */}
-                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-wrap gap-6 items-center justify-center text-sm">
-                    <span className="font-semibold text-gray-700">Légende :</span>
-                    <div className="flex items-center gap-2">
-                        <div className="flex gap-1">
-                            {[1, 2, 3].map(n => (
-                                <span key={n} className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">{n}</span>
-                            ))}
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3 text-sm">
+                    <h4 className="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-2">Echelle d'évaluation :</h4>
+
+                    <div className="grid gap-2">
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">7</span>
+                            <span className="text-gray-700">Capacité maîtrisée et mise en œuvre dans le milieu ordinaire</span>
                         </div>
-                        <span className="text-gray-600">Non acquis</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="flex gap-1">
-                            {[4, 5, 6].map(n => (
-                                <span key={n} className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">{n}</span>
-                            ))}
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">6</span>
+                            <span className="text-gray-700">Capacité maîtrisée et à mettre en œuvre en milieu ordinaire avec suivi ESAT</span>
                         </div>
-                        <span className="text-gray-600">En cours</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">7</span>
-                        <span className="text-gray-600">Acquis</span>
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">5</span>
+                            <span className="text-gray-700">Capacité acquise et en cours de mise en œuvre</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">4</span>
+                            <span className="text-gray-700">Capacité en cours d'acquisition et non mis en œuvre seule</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">3</span>
+                            <span className="text-gray-700">Capacité non acquise, a la volonté mais ne peut pas</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">2</span>
+                            <span className="text-gray-700">Capacité non acquise car ne s'implique pas</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">1</span>
+                            <span className="text-gray-700">Capacité non constaté</span>
+                        </div>
                     </div>
                 </div>
             </div>

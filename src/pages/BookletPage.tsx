@@ -1,6 +1,5 @@
 import { useEvaluation } from '../store/EvaluationContext';
 import { SkillRadar } from '../components/charts/SkillRadar';
-import type { ThemeEvaluation } from '../types';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -88,13 +87,13 @@ export const BookletPage: React.FC = () => {
     const getChartData = (themeId: string, phase: 'phase1' | 'phase2' | 'phase3') => {
         const theme = ALL_THEMES.find(t => t.id === themeId);
         if (!theme) return [];
-        const themeData = data.evaluations[themeId as keyof typeof data.evaluations] as ThemeEvaluation;
+        const themeData = data.evaluations?.[themeId as keyof typeof data.evaluations] || {};
         return theme.subThemes.map(sub => themeData[sub.id]?.[phase]?.value || 0);
     };
 
     const getGlobalAverageData = (phase: 'phase1' | 'phase2' | 'phase3') => {
         return ALL_THEMES.map(theme => {
-            const themeData = data.evaluations[theme.id as keyof typeof data.evaluations] as ThemeEvaluation;
+            const themeData = data.evaluations?.[theme.id as keyof typeof data.evaluations] || {};
             const scores = theme.subThemes
                 .map(sub => themeData[sub.id]?.[phase]?.value || 0)
                 .filter(v => v > 0);
@@ -106,7 +105,7 @@ export const BookletPage: React.FC = () => {
     };
 
     return (
-        <div className="max-w-[210mm] mx-auto bg-white p-8 print:p-0 min-h-screen">
+        <div className="max-w-[297mm] mx-auto bg-white p-8 print:p-0 min-h-screen">
             <div className="print:hidden mb-8">
                 <button
                     onClick={() => navigate('/')}
@@ -121,7 +120,7 @@ export const BookletPage: React.FC = () => {
             <div className="min-h-[29.7cm] p-12 border-b-2 border-gray-100 print:border-none relative page-break-after">
                 <div className="text-center mb-16">
                     <h1 className="text-3xl font-bold uppercase border-b-2 border-black inline-block pb-2">
-                        Centre d'Évaluation Professionnelle
+                        Centre d'Évaluation Professionnelle - {data.profile.firstName} {data.profile.lastName}
                     </h1>
                 </div>
 
@@ -157,79 +156,85 @@ export const BookletPage: React.FC = () => {
 
             {/* Theme Pages */}
             {ALL_THEMES.map((theme) => (
-                <div key={theme.id} className="min-h-[29.7cm] p-12 border-b-2 border-gray-100 print:border-none page-break-after">
-                    <h2 className="text-2xl font-bold mb-8 border-b-2 border-gray-800 pb-2">
+                <div key={theme.id} className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after">
+                    <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
                         Thème évalué: {theme.title}
                     </h2>
 
-                    <div className="grid grid-cols-2 gap-8 mb-8">
+                    {/* Charts Row - Horizontal Layout */}
+                    <div className="grid grid-cols-3 gap-4 mb-6 break-inside-avoid">
                         {/* Phase 1 Radar */}
-                        <div className="border p-4 rounded">
-                            <h3 className="text-center font-semibold mb-2">Phase 1: Pré-requis</h3>
-                            <SkillRadar
-                                labels={theme.subThemes.map(s => s.label)}
-                                dataPhase1={getChartData(theme.id, 'phase1')}
-                            />
+                        <div className="border p-2 rounded flex flex-col items-center">
+                            <h3 className="text-center font-semibold mb-1 text-sm">Phase 1: Pré-requis</h3>
+                            <div className="w-full h-[250px]">
+                                <SkillRadar
+                                    labels={theme.subThemes.map(s => s.label)}
+                                    dataPhase1={getChartData(theme.id, 'phase1')}
+                                />
+                            </div>
                         </div>
                         {/* Phase 2 Radar */}
-                        <div className="border p-4 rounded">
-                            <h3 className="text-center font-semibold mb-2">Phase 2: Découverte</h3>
-                            <SkillRadar
-                                labels={theme.subThemes.map(s => s.label)}
-                                dataPhase2={getChartData(theme.id, 'phase2')}
-                            />
+                        <div className="border p-2 rounded flex flex-col items-center">
+                            <h3 className="text-center font-semibold mb-1 text-sm">Phase 2: Découverte</h3>
+                            <div className="w-full h-[250px]">
+                                <SkillRadar
+                                    labels={theme.subThemes.map(s => s.label)}
+                                    dataPhase2={getChartData(theme.id, 'phase2')}
+                                />
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="mb-8">
                         {/* Phase 3 Radar */}
-                        <div className="border p-4 rounded max-w-md mx-auto">
-                            <h3 className="text-center font-semibold mb-2">Phase 3: Approfondissement</h3>
-                            <SkillRadar
-                                labels={theme.subThemes.map(s => s.label)}
-                                dataPhase3={getChartData(theme.id, 'phase3')}
-                            />
+                        <div className="border p-2 rounded flex flex-col items-center">
+                            <h3 className="text-center font-semibold mb-1 text-sm">Phase 3: Approfondissement</h3>
+                            <div className="w-full h-[250px]">
+                                <SkillRadar
+                                    labels={theme.subThemes.map(s => s.label)}
+                                    dataPhase3={getChartData(theme.id, 'phase3')}
+                                />
+                            </div>
                         </div>
                     </div>
 
                     {/* Scores Table */}
-                    <table className="w-full border-collapse border border-gray-800 text-sm mb-8">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="border border-gray-800 p-2 text-left">Sous-Thèmes</th>
-                                <th className="border border-gray-800 p-2 w-16 bg-yellow-100">Phase 1</th>
-                                <th className="border border-gray-800 p-2 w-16 bg-green-100">Phase 2</th>
-                                <th className="border border-gray-800 p-2 w-16 bg-red-100">Phase 3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {theme.subThemes.map(sub => {
-                                const themeData = data.evaluations[theme.id as keyof typeof data.evaluations] as ThemeEvaluation;
-                                return (
-                                    <tr key={sub.id}>
-                                        <td className="border border-gray-800 p-2">{sub.label}</td>
-                                        <td className="border border-gray-800 p-2 text-center">{themeData[sub.id]?.phase1?.value || '-'}</td>
-                                        <td className="border border-gray-800 p-2 text-center">{themeData[sub.id]?.phase2?.value || '-'}</td>
-                                        <td className="border border-gray-800 p-2 text-center">{themeData[sub.id]?.phase3?.value || '-'}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                    <div className="break-inside-avoid mb-6">
+                        <table className="w-full border-collapse border border-gray-800 text-xs">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="border border-gray-800 p-1 text-left">Sous-Thèmes</th>
+                                    <th className="border border-gray-800 p-1 w-12 bg-yellow-100 text-center">Ph. 1</th>
+                                    <th className="border border-gray-800 p-1 w-12 bg-green-100 text-center">Ph. 2</th>
+                                    <th className="border border-gray-800 p-1 w-12 bg-red-100 text-center">Ph. 3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {theme.subThemes.map(sub => {
+                                    const themeData = data.evaluations?.[theme.id as keyof typeof data.evaluations] || {};
+                                    return (
+                                        <tr key={sub.id}>
+                                            <td className="border border-gray-800 p-1">{sub.label}</td>
+                                            <td className="border border-gray-800 p-1 text-center">{themeData[sub.id]?.phase1?.value || '-'}</td>
+                                            <td className="border border-gray-800 p-1 text-center">{themeData[sub.id]?.phase2?.value || '-'}</td>
+                                            <td className="border border-gray-800 p-1 text-center">{themeData[sub.id]?.phase3?.value || '-'}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
 
                     {/* Final Observations */}
-                    <div className="border border-gray-800 p-4 rounded bg-gray-50">
-                        <h3 className="font-bold border-b border-gray-800 pb-2 mb-4">Observations Finales (Phase 3)</h3>
+                    <div className="border border-gray-800 p-4 rounded bg-gray-50 break-inside-avoid">
+                        <h3 className="font-bold border-b border-gray-800 pb-2 mb-4 text-sm">Observations Finales (Phase 3)</h3>
                         <div className="grid grid-cols-2 gap-8">
                             <div>
-                                <strong className="block mb-2 text-sm uppercase text-gray-600">Principales capacités identifiées :</strong>
-                                <p className="text-sm min-h-[60px]">
+                                <strong className="block mb-2 text-xs uppercase text-gray-600">Principales capacités identifiées :</strong>
+                                <p className="text-sm min-h-[60px] whitespace-pre-wrap">
                                     {data.themeObservations?.[theme.id]?.phase3?.capacities || 'Aucune observation saisie.'}
                                 </p>
                             </div>
                             <div>
-                                <strong className="block mb-2 text-sm uppercase text-gray-600">Principales difficultés rencontrées :</strong>
-                                <p className="text-sm min-h-[60px]">
+                                <strong className="block mb-2 text-xs uppercase text-gray-600">Principales difficultés rencontrées :</strong>
+                                <p className="text-sm min-h-[60px] whitespace-pre-wrap">
                                     {data.themeObservations?.[theme.id]?.phase3?.difficulties || 'Aucune observation saisie.'}
                                 </p>
                             </div>
@@ -244,7 +249,7 @@ export const BookletPage: React.FC = () => {
                     Moyenne des 5 thèmes à la fin du stage
                 </h2>
 
-                <div className="max-w-2xl mx-auto mb-12">
+                <div className="max-w-2xl mx-auto mb-12 h-[500px]">
                     <SkillRadar
                         labels={ALL_THEMES.map(t => t.title.split(' ')[0])} // Shorten labels
                         dataPhase1={getGlobalAverageData('phase1')}
@@ -253,7 +258,7 @@ export const BookletPage: React.FC = () => {
                     />
                 </div>
 
-                <div className="mt-16 border-t pt-8">
+                <div className="mt-16 border-t pt-8 break-inside-avoid">
                     <h3 className="text-xl font-bold mb-8">Signature</h3>
 
                     <div className="grid grid-cols-2 gap-16">
