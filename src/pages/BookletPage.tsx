@@ -181,8 +181,6 @@ export const BookletPage: React.FC = () => {
 
             {/* Theme Pages */}
             {ALL_THEMES.map((theme) => (
-            {/* Theme Pages */}
-            {ALL_THEMES.map((theme) => (
                 <div key={theme.id}>
                     {/* Page 1: Charts (Vertical Stack) */}
                     <div className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after flex flex-col">
@@ -193,7 +191,7 @@ export const BookletPage: React.FC = () => {
                         <div className="flex-1 flex flex-col justify-between gap-4">
                             {/* Phase 1 Radar */}
                             <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
-                                <button 
+                                <button
                                     onClick={() => openModal(`${theme.title} - Phase 1`, theme.subThemes.map(s => s.label), getChartData(theme.id, 'phase1'))}
                                     className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
                                     title="Agrandir"
@@ -213,7 +211,7 @@ export const BookletPage: React.FC = () => {
 
                             {/* Phase 2 Radar */}
                             <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
-                                <button 
+                                <button
                                     onClick={() => openModal(`${theme.title} - Phase 2`, theme.subThemes.map(s => s.label), undefined, getChartData(theme.id, 'phase2'))}
                                     className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
                                     title="Agrandir"
@@ -233,7 +231,7 @@ export const BookletPage: React.FC = () => {
 
                             {/* Phase 3 Radar */}
                             <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
-                                <button 
+                                <button
                                     onClick={() => openModal(`${theme.title} - Phase 3`, theme.subThemes.map(s => s.label), undefined, undefined, getChartData(theme.id, 'phase3'))}
                                     className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
                                     title="Agrandir"
