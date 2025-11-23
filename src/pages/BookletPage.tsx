@@ -181,108 +181,127 @@ export const BookletPage: React.FC = () => {
 
             {/* Theme Pages */}
             {ALL_THEMES.map((theme) => (
-                <div key={theme.id} className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after">
-                    <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
-                        Thème évalué: {theme.title}
-                    </h2>
+            {/* Theme Pages */}
+            {ALL_THEMES.map((theme) => (
+                <div key={theme.id}>
+                    {/* Page 1: Charts (Vertical Stack) */}
+                    <div className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after flex flex-col">
+                        <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
+                            Thème évalué: {theme.title} - Graphiques
+                        </h2>
 
-                    {/* Charts Row - Horizontal Layout */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 break-inside-avoid">
-                        {/* Phase 1 Radar */}
-                        <div className="border p-2 rounded flex flex-col items-center relative group">
-                            <button
-                                onClick={() => openModal(`${theme.title} - Phase 1`, theme.subThemes.map(s => s.label), getChartData(theme.id, 'phase1'))}
-                                className="absolute top-2 right-2 p-1.5 bg-white shadow-sm rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden"
-                                title="Agrandir"
-                            >
-                                <Maximize2 size={16} />
-                            </button>
-                            <h3 className="text-center font-semibold mb-1 text-sm">Phase 1: Pré-requis</h3>
-                            <div className="w-full h-[250px]">
-                                <SkillRadar
-                                    labels={theme.subThemes.map(s => s.label)}
-                                    dataPhase1={getChartData(theme.id, 'phase1')}
-                                />
+                        <div className="flex-1 flex flex-col justify-between gap-4">
+                            {/* Phase 1 Radar */}
+                            <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
+                                <button 
+                                    onClick={() => openModal(`${theme.title} - Phase 1`, theme.subThemes.map(s => s.label), getChartData(theme.id, 'phase1'))}
+                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
+                                    title="Agrandir"
+                                >
+                                    <Maximize2 size={20} />
+                                </button>
+                                <h3 className="text-center font-bold mb-2 text-lg">Phase 1: Pré-requis</h3>
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <div className="w-full h-[90%]">
+                                        <SkillRadar
+                                            labels={theme.subThemes.map(s => s.label)}
+                                            dataPhase1={getChartData(theme.id, 'phase1')}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        {/* Phase 2 Radar */}
-                        <div className="border p-2 rounded flex flex-col items-center relative group">
-                            <button
-                                onClick={() => openModal(`${theme.title} - Phase 2`, theme.subThemes.map(s => s.label), undefined, getChartData(theme.id, 'phase2'))}
-                                className="absolute top-2 right-2 p-1.5 bg-white shadow-sm rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden"
-                                title="Agrandir"
-                            >
-                                <Maximize2 size={16} />
-                            </button>
-                            <h3 className="text-center font-semibold mb-1 text-sm">Phase 2: Découverte</h3>
-                            <div className="w-full h-[250px]">
-                                <SkillRadar
-                                    labels={theme.subThemes.map(s => s.label)}
-                                    dataPhase2={getChartData(theme.id, 'phase2')}
-                                />
+
+                            {/* Phase 2 Radar */}
+                            <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
+                                <button 
+                                    onClick={() => openModal(`${theme.title} - Phase 2`, theme.subThemes.map(s => s.label), undefined, getChartData(theme.id, 'phase2'))}
+                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
+                                    title="Agrandir"
+                                >
+                                    <Maximize2 size={20} />
+                                </button>
+                                <h3 className="text-center font-bold mb-2 text-lg">Phase 2: Découverte</h3>
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <div className="w-full h-[90%]">
+                                        <SkillRadar
+                                            labels={theme.subThemes.map(s => s.label)}
+                                            dataPhase2={getChartData(theme.id, 'phase2')}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        {/* Phase 3 Radar */}
-                        <div className="border p-2 rounded flex flex-col items-center relative group">
-                            <button
-                                onClick={() => openModal(`${theme.title} - Phase 3`, theme.subThemes.map(s => s.label), undefined, undefined, getChartData(theme.id, 'phase3'))}
-                                className="absolute top-2 right-2 p-1.5 bg-white shadow-sm rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden"
-                                title="Agrandir"
-                            >
-                                <Maximize2 size={16} />
-                            </button>
-                            <h3 className="text-center font-semibold mb-1 text-sm">Phase 3: Approfondissement</h3>
-                            <div className="w-full h-[250px]">
-                                <SkillRadar
-                                    labels={theme.subThemes.map(s => s.label)}
-                                    dataPhase3={getChartData(theme.id, 'phase3')}
-                                />
+
+                            {/* Phase 3 Radar */}
+                            <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
+                                <button 
+                                    onClick={() => openModal(`${theme.title} - Phase 3`, theme.subThemes.map(s => s.label), undefined, undefined, getChartData(theme.id, 'phase3'))}
+                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
+                                    title="Agrandir"
+                                >
+                                    <Maximize2 size={20} />
+                                </button>
+                                <h3 className="text-center font-bold mb-2 text-lg">Phase 3: Approfondissement</h3>
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <div className="w-full h-[90%]">
+                                        <SkillRadar
+                                            labels={theme.subThemes.map(s => s.label)}
+                                            dataPhase3={getChartData(theme.id, 'phase3')}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Scores Table */}
-                    <div className="break-inside-avoid mb-6">
-                        <table className="w-full border-collapse border border-gray-800 text-xs">
-                            <thead>
-                                <tr className="bg-gray-100">
-                                    <th className="border border-gray-800 p-1 text-left">Sous-Thèmes</th>
-                                    <th className="border border-gray-800 p-1 w-12 bg-yellow-100 text-center">Ph. 1</th>
-                                    <th className="border border-gray-800 p-1 w-12 bg-green-100 text-center">Ph. 2</th>
-                                    <th className="border border-gray-800 p-1 w-12 bg-red-100 text-center">Ph. 3</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {theme.subThemes.map(sub => {
-                                    const themeData = data.evaluations?.[theme.id as keyof typeof data.evaluations] || {};
-                                    return (
-                                        <tr key={sub.id}>
-                                            <td className="border border-gray-800 p-1">{sub.label}</td>
-                                            <td className="border border-gray-800 p-1 text-center">{themeData[sub.id]?.phase1?.value || '-'}</td>
-                                            <td className="border border-gray-800 p-1 text-center">{themeData[sub.id]?.phase2?.value || '-'}</td>
-                                            <td className="border border-gray-800 p-1 text-center">{themeData[sub.id]?.phase3?.value || '-'}</td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                    {/* Page 2: Details (Table & Observations) */}
+                    <div className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after">
+                        <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
+                            Thème évalué: {theme.title} - Détails
+                        </h2>
 
-                    {/* Final Observations */}
-                    <div className="border border-gray-800 p-4 rounded bg-gray-50 break-inside-avoid">
-                        <h3 className="font-bold border-b border-gray-800 pb-2 mb-4 text-sm">Observations Finales (Phase 3)</h3>
-                        <div className="grid grid-cols-2 gap-8">
-                            <div>
-                                <strong className="block mb-2 text-xs uppercase text-gray-600">Principales capacités identifiées :</strong>
-                                <p className="text-sm min-h-[60px] whitespace-pre-wrap">
-                                    {data.themeObservations?.[theme.id]?.phase3?.capacities || 'Aucune observation saisie.'}
-                                </p>
-                            </div>
-                            <div>
-                                <strong className="block mb-2 text-xs uppercase text-gray-600">Principales difficultés rencontrées :</strong>
-                                <p className="text-sm min-h-[60px] whitespace-pre-wrap">
-                                    {data.themeObservations?.[theme.id]?.phase3?.difficulties || 'Aucune observation saisie.'}
-                                </p>
+                        {/* Scores Table */}
+                        <div className="mb-8">
+                            <table className="w-full border-collapse border border-gray-800 text-sm">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="border border-gray-800 p-2 text-left">Sous-Thèmes</th>
+                                        <th className="border border-gray-800 p-2 w-20 bg-yellow-100 text-center">Ph. 1</th>
+                                        <th className="border border-gray-800 p-2 w-20 bg-green-100 text-center">Ph. 2</th>
+                                        <th className="border border-gray-800 p-2 w-20 bg-red-100 text-center">Ph. 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {theme.subThemes.map(sub => {
+                                        const themeData = data.evaluations?.[theme.id as keyof typeof data.evaluations] || {};
+                                        return (
+                                            <tr key={sub.id}>
+                                                <td className="border border-gray-800 p-2">{sub.label}</td>
+                                                <td className="border border-gray-800 p-2 text-center font-medium">{themeData[sub.id]?.phase1?.value || '-'}</td>
+                                                <td className="border border-gray-800 p-2 text-center font-medium">{themeData[sub.id]?.phase2?.value || '-'}</td>
+                                                <td className="border border-gray-800 p-2 text-center font-medium">{themeData[sub.id]?.phase3?.value || '-'}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Final Observations */}
+                        <div className="border border-gray-800 p-6 rounded bg-gray-50">
+                            <h3 className="font-bold border-b border-gray-800 pb-2 mb-6 text-lg">Observations Finales (Phase 3)</h3>
+                            <div className="grid grid-cols-1 gap-8">
+                                <div>
+                                    <strong className="block mb-2 uppercase text-gray-600">Principales capacités identifiées :</strong>
+                                    <div className="p-4 bg-white border border-gray-300 rounded min-h-[150px] whitespace-pre-wrap">
+                                        {data.themeObservations?.[theme.id]?.phase3?.capacities || 'Aucune observation saisie.'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong className="block mb-2 uppercase text-gray-600">Principales difficultés rencontrées :</strong>
+                                    <div className="p-4 bg-white border border-gray-300 rounded min-h-[150px] whitespace-pre-wrap">
+                                        {data.themeObservations?.[theme.id]?.phase3?.difficulties || 'Aucune observation saisie.'}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -304,7 +323,7 @@ export const BookletPage: React.FC = () => {
                             getGlobalAverageData('phase2'),
                             getGlobalAverageData('phase3')
                         )}
-                        className="absolute top-4 right-4 p-2 bg-white shadow-md rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-10"
+                        className="absolute top-4 right-4 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden z-10"
                         title="Agrandir"
                     >
                         <Maximize2 size={24} />
@@ -347,6 +366,6 @@ export const BookletPage: React.FC = () => {
                 dataPhase2={modalConfig.dataPhase2}
                 dataPhase3={modalConfig.dataPhase3}
             />
-        </div>
+        </div >
     );
 };
