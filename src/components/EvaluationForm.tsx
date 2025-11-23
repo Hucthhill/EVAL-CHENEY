@@ -176,7 +176,6 @@ export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, 
                                     <div className="mt-4">
                                         {/* Dynamic Layout based on active phase */}
                                         {(() => {
-                                            const activePhaseIndex = phases.findIndex(p => getPhaseStatus(p.id).isActive && !getPhaseStatus(p.id).isValidated);
                                             // If no active phase (all validated), show all as summaries? Or just last?
                                             // Assuming there's always an active phase or we show the last one.
 
