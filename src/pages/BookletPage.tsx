@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useEvaluation } from '../store/EvaluationContext';
 import { SkillRadar } from '../components/charts/SkillRadar';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Maximize2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ChartModal } from '../components/ChartModal';
 
 const THEMES = [
     {
@@ -83,6 +85,18 @@ const ALL_THEMES = [
 export const BookletPage: React.FC = () => {
     const { data } = useEvaluation();
     const navigate = useNavigate();
+    const [modalConfig, setModalConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        labels: string[];
+        dataPhase1?: number[];
+        dataPhase2?: number[];
+        dataPhase3?: number[];
+    }>({
+        isOpen: false,
+        title: '',
+        labels: [],
+    });
 
     const getChartData = (themeId: string, phase: 'phase1' | 'phase2' | 'phase3') => {
         const theme = ALL_THEMES.find(t => t.id === themeId);
@@ -101,6 +115,17 @@ export const BookletPage: React.FC = () => {
             if (scores.length === 0) return 0;
             const sum = scores.reduce((a, b) => a + b, 0);
             return Number((sum / scores.length).toFixed(1));
+        });
+    };
+
+    const openModal = (title: string, labels: string[], p1?: number[], p2?: number[], p3?: number[]) => {
+        setModalConfig({
+            isOpen: true,
+            title,
+            labels,
+            dataPhase1: p1,
+            dataPhase2: p2,
+            dataPhase3: p3
         });
     };
 
@@ -164,7 +189,14 @@ export const BookletPage: React.FC = () => {
                     {/* Charts Row - Horizontal Layout */}
                     <div className="grid grid-cols-3 gap-4 mb-6 break-inside-avoid">
                         {/* Phase 1 Radar */}
-                        <div className="border p-2 rounded flex flex-col items-center">
+                        <div className="border p-2 rounded flex flex-col items-center relative group">
+                            <button
+                                onClick={() => openModal(`${theme.title} - Phase 1`, theme.subThemes.map(s => s.label), getChartData(theme.id, 'phase1'))}
+                                className="absolute top-2 right-2 p-1.5 bg-white shadow-sm rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden"
+                                title="Agrandir"
+                            >
+                                <Maximize2 size={16} />
+                            </button>
                             <h3 className="text-center font-semibold mb-1 text-sm">Phase 1: Pré-requis</h3>
                             <div className="w-full h-[250px]">
                                 <SkillRadar
@@ -174,7 +206,14 @@ export const BookletPage: React.FC = () => {
                             </div>
                         </div>
                         {/* Phase 2 Radar */}
-                        <div className="border p-2 rounded flex flex-col items-center">
+                        <div className="border p-2 rounded flex flex-col items-center relative group">
+                            <button
+                                onClick={() => openModal(`${theme.title} - Phase 2`, theme.subThemes.map(s => s.label), undefined, getChartData(theme.id, 'phase2'))}
+                                className="absolute top-2 right-2 p-1.5 bg-white shadow-sm rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden"
+                                title="Agrandir"
+                            >
+                                <Maximize2 size={16} />
+                            </button>
                             <h3 className="text-center font-semibold mb-1 text-sm">Phase 2: Découverte</h3>
                             <div className="w-full h-[250px]">
                                 <SkillRadar
@@ -184,7 +223,14 @@ export const BookletPage: React.FC = () => {
                             </div>
                         </div>
                         {/* Phase 3 Radar */}
-                        <div className="border p-2 rounded flex flex-col items-center">
+                        <div className="border p-2 rounded flex flex-col items-center relative group">
+                            <button
+                                onClick={() => openModal(`${theme.title} - Phase 3`, theme.subThemes.map(s => s.label), undefined, undefined, getChartData(theme.id, 'phase3'))}
+                                className="absolute top-2 right-2 p-1.5 bg-white shadow-sm rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden"
+                                title="Agrandir"
+                            >
+                                <Maximize2 size={16} />
+                            </button>
                             <h3 className="text-center font-semibold mb-1 text-sm">Phase 3: Approfondissement</h3>
                             <div className="w-full h-[250px]">
                                 <SkillRadar
@@ -244,12 +290,25 @@ export const BookletPage: React.FC = () => {
             ))}
 
             {/* Global Summary Page */}
-            <div className="min-h-[29.7cm] p-12 border-b-2 border-gray-100 print:border-none page-break-after">
+            <div className="min-h-[29.7cm] p-12 border-b-2 border-gray-100 print:border-none page-break-after relative">
                 <h2 className="text-2xl font-bold mb-8 border-b-2 border-gray-800 pb-2">
                     Moyenne des 5 thèmes à la fin du stage
                 </h2>
 
-                <div className="max-w-2xl mx-auto mb-12 h-[500px]">
+                <div className="max-w-2xl mx-auto mb-12 h-[500px] relative group">
+                    <button
+                        onClick={() => openModal(
+                            "Moyenne Globale",
+                            ALL_THEMES.map(t => t.title),
+                            getGlobalAverageData('phase1'),
+                            getGlobalAverageData('phase2'),
+                            getGlobalAverageData('phase3')
+                        )}
+                        className="absolute top-4 right-4 p-2 bg-white shadow-md rounded-full text-gray-400 hover:text-bottle-green opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-10"
+                        title="Agrandir"
+                    >
+                        <Maximize2 size={24} />
+                    </button>
                     <SkillRadar
                         labels={ALL_THEMES.map(t => t.title.split(' ')[0])} // Shorten labels
                         dataPhase1={getGlobalAverageData('phase1')}
@@ -278,6 +337,16 @@ export const BookletPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            <ChartModal
+                isOpen={modalConfig.isOpen}
+                onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+                title={modalConfig.title}
+                labels={modalConfig.labels}
+                dataPhase1={modalConfig.dataPhase1}
+                dataPhase2={modalConfig.dataPhase2}
+                dataPhase3={modalConfig.dataPhase3}
+            />
         </div>
     );
 };

@@ -63,11 +63,16 @@ export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, 
     };
 
     const getScoreButtonStyle = (num: number, isSelected: boolean) => {
-        if (isSelected) return "ring-2 ring-offset-1 ring-bottle-green scale-110";
+        const baseStyle = num <= 3
+            ? "bg-gradient-to-br from-orange-300 to-orange-500 text-white shadow-sm"
+            : num <= 6
+                ? "bg-gradient-to-br from-yellow-300 to-yellow-500 text-white shadow-sm"
+                : "bg-gradient-to-br from-green-400 to-green-600 text-white shadow-sm";
 
-        if (num <= 3) return "bg-gradient-to-br from-orange-300 to-orange-500 text-white shadow-sm";
-        if (num <= 6) return "bg-gradient-to-br from-yellow-300 to-yellow-500 text-white shadow-sm";
-        return "bg-gradient-to-br from-green-400 to-green-600 text-white shadow-sm";
+        if (isSelected) {
+            return `${baseStyle} ring-2 ring-offset-1 ring-bottle-green scale-110`;
+        }
+        return baseStyle;
     };
 
     const currentPhase = phases.find(p => {
