@@ -12,13 +12,41 @@ interface AccessibilityContextType {
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
 
 export const AccessibilityProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [theme, setTheme] = useState<'light' | 'dark'>('light');
-    const [textSize, setTextSize] = useState<number>(1);
-    const [font, setFont] = useState<'standard' | 'opendyslexic'>('standard');
+    // Initialize from localStorage or use defaults
+    const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+        const saved = localStorage.getItem('accessibility-theme');
+        return (saved === 'light' || saved === 'dark') ? saved : 'light';
+    });
+
+    const [textSize, setTextSize] = useState<number>(() => {
+        const saved = localStorage.getItem('accessibility-textSize');
+        const parsed = saved ? parseInt(saved, 10) : 1;
+        return parsed >= 1 && parsed <= 6 ? parsed : 1;
+    });
+
+    const [font, setFont] = useState<'standard' | 'opendyslexic'>(() => {
+        const saved = localStorage.getItem('accessibility-font');
+        return (saved === 'standard' || saved === 'opendyslexic') ? saved : 'standard';
+    });
 
     const toggleTheme = () => {
         setTheme(prev => prev === 'light' ? 'dark' : 'light');
     };
+
+    // Persist theme to localStorage
+    useEffect(() => {
+        localStorage.setItem('accessibility-theme', theme);
+    }, [theme]);
+
+    // Persist textSize to localStorage
+    useEffect(() => {
+        localStorage.setItem('accessibility-textSize', textSize.toString());
+    }, [textSize]);
+
+    // Persist font to localStorage
+    useEffect(() => {
+        localStorage.setItem('accessibility-font', font);
+    }, [font]);
 
     useEffect(() => {
         // Apply classes to html element (documentElement) for Tailwind dark mode
