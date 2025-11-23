@@ -21,16 +21,17 @@ export const AccessibilityProvider: React.FC<{ children: ReactNode }> = ({ child
     };
 
     useEffect(() => {
-        // Apply classes to body
+        // Apply classes to html element (documentElement) for Tailwind dark mode
+        const root = document.documentElement;
         const body = document.body;
 
         // Theme
         if (theme === 'dark') {
-            body.classList.add('dark');
+            root.classList.add('dark');
             body.style.backgroundColor = '#1a1a1a';
             body.style.color = '#ffffff';
         } else {
-            body.classList.remove('dark');
+            root.classList.remove('dark');
             body.style.backgroundColor = '#f9f9f9';
             body.style.color = '#0f0f0f';
         }

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { FileText, User, Printer, LayoutDashboard, LogOut, Menu, X, Lock } from 'lucide-react';
+import { FileText, User, Printer, LayoutDashboard, LogOut, Menu, X, Lock, Eye } from 'lucide-react';
 import { useAuth } from '../store/AuthContext';
-import { AccessibilityMenu } from './AccessibilityMenu';
+import { AccessibilityModal } from './AccessibilityMenu';
 
 export const Layout: React.FC = () => {
     const location = useLocation();
@@ -11,6 +11,7 @@ export const Layout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState(false);
 
     const navItems = [
         { path: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
@@ -97,12 +98,16 @@ export const Layout: React.FC = () => {
                     })}
 
                     <div className="pt-4 mt-4 border-t border-gray-200/50">
-                        <div className={`flex items-center gap-4 px-3 py-2 rounded-xl transition-all duration-200 group relative text-bottle-green hover:bg-white hover:shadow-md hover:translate-y-[-2px] ${isHovered ? 'justify-start' : 'justify-center'}`}>
-                            <AccessibilityMenu />
+                        <button
+                            onClick={() => setIsAccessibilityModalOpen(true)}
+                            className={`flex items-center gap-4 px-3 py-3 w-full text-left text-bottle-green hover:bg-white hover:shadow-md hover:translate-y-[-2px] rounded-xl transition-all duration-200 ${!isHovered && 'justify-center'}`}
+                            title="Accessibilité"
+                        >
+                            <Eye size={24} />
                             <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
                                 Accessibilité
                             </span>
-                        </div>
+                        </button>
 
                         <button
                             onClick={() => setIsPasswordModalOpen(true)}
@@ -174,6 +179,11 @@ export const Layout: React.FC = () => {
                     </div>
                 </div>
             )}
+            {/* Accessibility Modal */}
+            <AccessibilityModal
+                isOpen={isAccessibilityModalOpen}
+                onClose={() => setIsAccessibilityModalOpen(false)}
+            />
         </div>
     );
 };

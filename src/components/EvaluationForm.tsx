@@ -160,46 +160,87 @@ export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, 
                                 className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
                             >
                                 <h3 className="text-lg font-medium text-gray-800">{sub.label}</h3>
-                                {isExpanded ? <ChevronDown className="text-gray-400" /> : <ChevronRight className="text-gray-400" />}
+                                <div className="flex items-center gap-4">
+                                    {/* Show current score preview if collapsed */}
+                                    {!isExpanded && currentPhase && (
+                                        <span className="text-sm font-bold text-bottle-green bg-green-50 px-3 py-1 rounded-full">
+                                            {themeData[sub.id]?.[currentPhase.id]?.value ? `Note: ${themeData[sub.id]?.[currentPhase.id]?.value}` : 'Non noté'}
+                                        </span>
+                                    )}
+                                    {isExpanded ? <ChevronDown className="text-gray-400" /> : <ChevronRight className="text-gray-400" />}
+                                </div>
                             </button>
 
                             {isExpanded && (
                                 <div className="p-6 pt-0 border-t border-gray-50 animate-in slide-in-from-top-2 duration-200">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                                        {phases.map((phase) => {
-                                            const score = themeData[sub.id]?.[phase.id]?.value || 0;
-                                            const { isActive } = getPhaseStatus(phase.id);
+                                    <div className="mt-4">
+                                        {/* Dynamic Layout based on active phase */}
+                                        {(() => {
+                                            const activePhaseIndex = phases.findIndex(p => getPhaseStatus(p.id).isActive && !getPhaseStatus(p.id).isValidated);
+                                            // If no active phase (all validated), show all as summaries? Or just last?
+                                            // Assuming there's always an active phase or we show the last one.
 
-                                            if (!isActive) return (
-                                                <div key={phase.id} className="rounded-lg p-4 border border-gray-100 bg-gray-50 opacity-50 flex items-center justify-center">
-                                                    <span className="text-gray-400 text-sm">{phase.label} - En attente</span>
-                                                </div>
-                                            );
+                                            const previousPhases = phases.filter(p => getPhaseStatus(p.id).isValidated);
+                                            const activePhase = phases.find(p => getPhaseStatus(p.id).isActive && !getPhaseStatus(p.id).isValidated);
 
                                             return (
-                                                <div key={phase.id} className={clsx("rounded-lg p-4 border transition-colors", getPhaseStyles(phase.id))}>
-                                                    <div className="text-xs font-bold uppercase tracking-wider mb-3 text-center">
-                                                        {phase.label}
-                                                    </div>
-                                                    <div className="flex justify-between gap-1">
-                                                        {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-                                                            <button
-                                                                key={num}
-                                                                onClick={() => !isLocked && updateScore(themeId, sub.id, phase.id, num)}
-                                                                disabled={isLocked}
-                                                                className={clsx(
-                                                                    "w-8 h-8 rounded-full text-sm font-medium transition-all transform",
-                                                                    isLocked ? "cursor-not-allowed opacity-70" : "active:scale-95 hover:scale-110",
-                                                                    getScoreButtonStyle(num, score === num)
-                                                                )}
-                                                            >
-                                                                {num}
-                                                            </button>
-                                                        ))}
-                                                    </div>
+                                                <div className={`grid gap-6 ${previousPhases.length > 0 ? 'grid-cols-1 md:grid-cols-[200px_1fr]' : 'grid-cols-1'}`}>
+
+                                                    {/* Left Column: Previous Phases Summaries */}
+                                                    {previousPhases.length > 0 && (
+                                                        <div className="space-y-3 flex flex-col justify-center border-r border-gray-100 pr-6">
+                                                            {previousPhases.map(p => {
+                                                                const score = themeData[sub.id]?.[p.id]?.value;
+                                                                return (
+                                                                    <div key={p.id} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                                                        <span className="text-sm font-medium text-gray-600">{p.label}</span>
+                                                                        <span className={clsx(
+                                                                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm",
+                                                                            score && score <= 3 ? "bg-gradient-to-br from-orange-300 to-orange-500" :
+                                                                                score && score <= 6 ? "bg-gradient-to-br from-yellow-300 to-yellow-500" :
+                                                                                    "bg-gradient-to-br from-green-400 to-green-600"
+                                                                        )}>
+                                                                            {score || '-'}
+                                                                        </span>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Right Column: Active Phase Controls */}
+                                                    {activePhase ? (
+                                                        <div className="flex flex-col justify-center">
+                                                            <div className={clsx("rounded-xl p-6 border transition-colors bg-white shadow-sm", getPhaseStyles(activePhase.id))}>
+                                                                <div className="text-sm font-bold uppercase tracking-wider mb-4 text-center border-b border-white/20 pb-2">
+                                                                    {activePhase.label} - Évaluation en cours
+                                                                </div>
+                                                                <div className="flex justify-between gap-2">
+                                                                    {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                                                                        <button
+                                                                            key={num}
+                                                                            onClick={() => !isLocked && updateScore(themeId, sub.id, activePhase.id, num)}
+                                                                            disabled={isLocked}
+                                                                            className={clsx(
+                                                                                "w-10 h-10 rounded-full text-base font-bold transition-all transform hover:shadow-lg flex items-center justify-center",
+                                                                                isLocked ? "cursor-not-allowed opacity-70" : "active:scale-95 hover:scale-110",
+                                                                                getScoreButtonStyle(num, themeData[sub.id]?.[activePhase.id]?.value === num)
+                                                                            )}
+                                                                        >
+                                                                            {num}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center justify-center p-6 text-gray-500 italic">
+                                                            Toutes les phases sont validées.
+                                                        </div>
+                                                    )}
                                                 </div>
                                             );
-                                        })}
+                                        })()}
                                     </div>
                                 </div>
                             )}

@@ -47,11 +47,11 @@ const backgroundZonesPlugin = {
 
         // Draw zones from outside in
         // Zone 6-7 (Green)
-        drawZone(r.getDistanceFromCenterForValue(7), 'rgba(34, 197, 94, 0.1)'); // Green-500 light
+        drawZone(r.getDistanceFromCenterForValue(7), 'rgba(74, 222, 128, 0.2)'); // Green-400 with opacity
         // Zone 3-6 (Yellow)
-        drawZone(r.getDistanceFromCenterForValue(6), 'rgba(234, 179, 8, 0.1)'); // Yellow-500 light
+        drawZone(r.getDistanceFromCenterForValue(6), 'rgba(250, 204, 21, 0.2)'); // Yellow-400 with opacity
         // Zone 0-3 (Orange)
-        drawZone(r.getDistanceFromCenterForValue(3), 'rgba(249, 115, 22, 0.1)'); // Orange-500 light
+        drawZone(r.getDistanceFromCenterForValue(3), 'rgba(251, 146, 60, 0.2)'); // Orange-400 with opacity
     }
 };
 
@@ -89,26 +89,31 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
             {
                 label: 'Phase 1',
                 data: dataPhase1,
-                backgroundColor: 'rgba(234, 179, 8, 0.2)', // Yellow-500
-                borderColor: 'rgba(234, 179, 8, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(234, 179, 8, 1)',
+                backgroundColor: 'rgba(251, 146, 60, 0.6)', // Orange for Phase 1 (matching low scores?) - Actually usually Phase 1 is just time.
+                // Let's keep distinct colors for phases but maybe match the "theme"?
+                // User said "Corriger le système de couleur... qui ne correspond pas aux couleurs de l'échelle".
+                // If they mean the lines should match the score they have... that's hard.
+                // If they mean the background zones, I fixed that above.
+                // Let's stick to distinct phase colors but maybe more vibrant.
+                borderColor: 'rgba(251, 146, 60, 1)', // Orange
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(251, 146, 60, 1)',
             },
             {
                 label: 'Phase 2',
                 data: dataPhase2,
-                backgroundColor: 'rgba(34, 197, 94, 0.2)', // Green-500
-                borderColor: 'rgba(34, 197, 94, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(34, 197, 94, 1)',
+                backgroundColor: 'rgba(250, 204, 21, 0.6)', // Yellow
+                borderColor: 'rgba(250, 204, 21, 1)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(250, 204, 21, 1)',
             },
             {
                 label: 'Phase 3',
                 data: dataPhase3,
-                backgroundColor: 'rgba(239, 68, 68, 0.2)', // Red-500
-                borderColor: 'rgba(239, 68, 68, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                backgroundColor: 'rgba(74, 222, 128, 0.6)', // Green
+                borderColor: 'rgba(74, 222, 128, 1)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(74, 222, 128, 1)',
             },
         ].filter(ds => ds.data.length > 0 && ds.data.some(v => v > 0)),
     };
@@ -125,42 +130,57 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
                     font: {
                         size: 10,
                         weight: 'bold' as const
-                    }
+                    },
+                    z: 10 // Ensure ticks are on top
                 },
                 grid: {
                     color: 'rgba(0, 0, 0, 0.1)',
+                    lineWidth: 1,
                 },
                 angleLines: {
                     color: 'rgba(0, 0, 0, 0.1)',
                 },
                 pointLabels: {
                     font: {
-                        size: 11,
+                        size: 12, // Larger font
+                        weight: 'bold' as const,
                     },
-                    // Ensure labels don't get cut off
-                    padding: 10
+                    padding: 20, // More padding
+                    color: '#374151' // Gray-700
                 },
             },
         },
         plugins: {
             legend: {
                 position: 'bottom' as const,
+                labels: {
+                    padding: 20,
+                    font: {
+                        size: 12
+                    }
+                }
             },
             title: {
                 display: !!title,
                 text: title,
+                font: {
+                    size: 16,
+                    weight: 'bold' as const
+                },
+                padding: {
+                    bottom: 20
+                }
             },
-            // Register custom plugin
             backgroundZones: {},
         },
         maintainAspectRatio: false,
         layout: {
-            padding: 10
+            padding: 20
         }
     };
 
     return (
-        <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center">
+        <div className="w-full h-[400px] md:h-[500px] flex items-center justify-center p-4">
             <Radar data={data} options={options} plugins={[backgroundZonesPlugin]} />
         </div>
     );
