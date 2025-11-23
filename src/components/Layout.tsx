@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { FileText, User, Printer, LayoutDashboard, LogOut, Menu, X, Lock, Settings } from 'lucide-react';
+import { FileText, User, Printer, LayoutDashboard, LogOut, Menu, X, Lock } from 'lucide-react';
 import { useAuth } from '../store/AuthContext';
 import { AccessibilityMenu } from './AccessibilityMenu';
 
@@ -77,8 +77,8 @@ export const Layout: React.FC = () => {
                                 to={item.path}
                                 onClick={() => setIsSidebarOpen(false)}
                                 className={`flex items-center gap-4 px-3 py-3 rounded-xl transition-all duration-200 group relative ${isActive
-                                        ? 'bg-bottle-green text-white shadow-md shadow-bottle-green/20'
-                                        : 'text-bottle-green hover:bg-green-50'
+                                    ? 'bg-bottle-green text-white shadow-md shadow-bottle-green/20'
+                                    : 'text-bottle-green hover:bg-green-50'
                                     }`}
                             >
                                 <div className="shrink-0">

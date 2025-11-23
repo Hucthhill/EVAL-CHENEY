@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEvaluation } from '../store/EvaluationContext';
 
 export const IdentityTab: React.FC = () => {

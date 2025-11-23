@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { EvaluationForm } from '../components/EvaluationForm';
 import { SkillRadar } from '../components/charts/SkillRadar';
 import { useEvaluation } from '../store/EvaluationContext';

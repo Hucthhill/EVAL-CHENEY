@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useEvaluation } from '../store/EvaluationContext';
 import type { Phase, ThemeEvaluation } from '../types';
 import { clsx } from 'clsx';

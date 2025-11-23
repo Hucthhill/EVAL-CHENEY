@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEvaluation } from '../store/EvaluationContext';
 import { SkillRadar } from '../components/charts/SkillRadar';
 import type { ThemeEvaluation } from '../types';
