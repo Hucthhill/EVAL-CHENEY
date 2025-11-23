@@ -40,26 +40,26 @@ export const SkillRadar: React.FC<SkillRadarProps> = ({
             {
                 label: 'Phase 1',
                 data: dataPhase1,
-                backgroundColor: 'rgba(255, 206, 86, 0.2)', // Yellow
-                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(234, 179, 8, 0.2)', // Yellow-500
+                borderColor: 'rgba(234, 179, 8, 1)',
                 borderWidth: 2,
-                pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+                pointBackgroundColor: 'rgba(234, 179, 8, 1)',
             },
             {
                 label: 'Phase 2',
                 data: dataPhase2,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Greenish
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(34, 197, 94, 0.2)', // Green-500
+                borderColor: 'rgba(34, 197, 94, 1)',
                 borderWidth: 2,
-                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                pointBackgroundColor: 'rgba(34, 197, 94, 1)',
             },
             {
                 label: 'Phase 3',
                 data: dataPhase3,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Redish
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(239, 68, 68, 0.2)', // Red-500
+                borderColor: 'rgba(239, 68, 68, 1)',
                 borderWidth: 2,
-                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                pointBackgroundColor: 'rgba(239, 68, 68, 1)',
             },
         ].filter(ds => ds.data.length > 0 && ds.data.some(v => v > 0)),
     };

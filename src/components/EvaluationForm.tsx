@@ -23,10 +23,16 @@ export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, 
         <div className="space-y-8">
             <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                 <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-                <div className="flex gap-2 text-sm text-gray-500">
-                    <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-yellow-400"></span> Phase 1</span>
-                    <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-green-400"></span> Phase 2</span>
-                    <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-red-400"></span> Phase 3</span>
+                <div className="flex gap-3 text-sm">
+                    <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200">
+                        <span className="w-2 h-2 rounded-full bg-yellow-500"></span> Phase 1
+                    </span>
+                    <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-200">
+                        <span className="w-2 h-2 rounded-full bg-green-500"></span> Phase 2
+                    </span>
+                    <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                        <span className="w-2 h-2 rounded-full bg-red-500"></span> Phase 3
+                    </span>
                 </div>
             </div>
 

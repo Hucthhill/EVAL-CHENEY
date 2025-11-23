@@ -96,14 +96,14 @@ export const EvaluationPage: React.FC = () => {
 
     return (
         <div className="space-y-8">
-            <div className="flex gap-4 border-b border-gray-200 overflow-x-auto pb-1">
+            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
                 {ALL_THEMES.map(theme => (
                     <button
                         key={theme.id}
                         onClick={() => setActiveTheme(theme.id as any)}
-                        className={`px-4 py-2 font-medium whitespace-nowrap transition-colors ${activeTheme === theme.id
-                            ? 'text-blue-600 border-b-2 border-blue-600'
-                            : 'text-gray-500 hover:text-gray-700'
+                        className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${activeTheme === theme.id
+                            ? 'bg-black text-white shadow-md transform scale-105'
+                            : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                             }`}
                     >
                         {theme.title}
@@ -120,47 +120,48 @@ export const EvaluationPage: React.FC = () => {
                     />
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Visualisation</h3>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit sticky top-24">
+                    <h3 className="text-lg font-bold text-gray-900 mb-6">Visualisation</h3>
                     <SkillRadar
                         labels={currentTheme.subThemes.map(s => s.label)}
                         dataPhase1={getChartData('phase1')}
                         dataPhase2={getChartData('phase2')}
                         dataPhase3={getChartData('phase3')}
                     />
-                    <div className="mt-6 space-y-2 text-sm text-gray-600">
-                        <p className="flex items-center gap-2">
-                            <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
-                            Phase 1: Stage découverte
-                        </p>
-                        <p className="flex items-center gap-2">
-                            <span className="w-3 h-3 rounded-full bg-teal-400"></span>
-                            Phase 2: Approfondissement (Mi-parcours)
-                        </p>
-                        <p className="flex items-center gap-2">
-                            <span className="w-3 h-3 rounded-full bg-pink-400"></span>
-                            Phase 3: Bilan final
-                        </p>
+                    <div className="mt-8 space-y-3">
+                        <div className="flex items-center gap-3 p-2 rounded-lg bg-yellow-50 border border-yellow-100">
+                            <span className="w-3 h-3 rounded-full bg-yellow-500 shadow-sm"></span>
+                            <span className="text-sm font-medium text-yellow-900">Phase 1: Stage découverte</span>
+                        </div>
+                        <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-100">
+                            <span className="w-3 h-3 rounded-full bg-green-500 shadow-sm"></span>
+                            <span className="text-sm font-medium text-green-900">Phase 2: Approfondissement</span>
+                        </div>
+                        <div className="flex items-center gap-3 p-2 rounded-lg bg-red-50 border border-red-100">
+                            <span className="w-3 h-3 rounded-full bg-red-500 shadow-sm"></span>
+                            <span className="text-sm font-medium text-red-900">Phase 3: Bilan final</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Observations Section */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Observations Générales (Par Phase)</h3>
+            {/* Observations Section */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-6">Observations Générales (Par Phase)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {(['phase1', 'phase2', 'phase3'] as const).map((phase) => (
-                        <div key={phase} className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700 capitalize">
+                        <div key={phase} className="space-y-3">
+                            <label className="block text-sm font-medium text-gray-700 capitalize flex items-center gap-2">
+                                <span className={`w-2 h-2 rounded-full ${phase === 'phase1' ? 'bg-yellow-500' : phase === 'phase2' ? 'bg-green-500' : 'bg-red-500'
+                                    }`}></span>
                                 {phase === 'phase1' ? 'Phase 1 (Découverte)' : phase === 'phase2' ? 'Phase 2 (Approfondissement)' : 'Phase 3 (Bilan)'}
                             </label>
                             <textarea
                                 value={data.observations[phase] || ''}
                                 onChange={(e) => updateObservation(phase, e.target.value)}
-                                // Actually I need to access updateObservation from useEvaluation
-                                // Let's fix the component to use it.
-                                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none text-sm"
-                                placeholder={`Observations pour ${phase}...`}
+                                className="w-full h-40 p-4 border-0 bg-gray-50 rounded-xl focus:ring-2 focus:ring-black focus:bg-white transition-all outline-none resize-none text-sm leading-relaxed"
+                                placeholder={`Saisissez vos observations pour la ${phase === 'phase1' ? 'première phase' : phase === 'phase2' ? 'deuxième phase' : 'troisième phase'}...`}
                             />
                         </div>
                     ))}
