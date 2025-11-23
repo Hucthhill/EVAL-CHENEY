@@ -50,13 +50,13 @@ export const Layout: React.FC = () => {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={`
-                    fixed lg:static inset-y-0 left-0 bg-white z-40 transform transition-all duration-300 ease-in-out shadow-xl border-r border-gray-100
-                    ${isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}
+                    fixed lg:static inset-y-0 left-0 z-40 transform transition-all duration-300 ease-in-out
+                    ${isSidebarOpen ? 'translate-x-0 w-64 bg-white shadow-xl' : '-translate-x-full lg:translate-x-0 lg:bg-transparent lg:shadow-none'}
                     ${sidebarWidth}
                     print:hidden flex flex-col h-screen sticky top-0
                 `}
             >
-                <div className="h-20 flex items-center justify-center border-b border-gray-100">
+                <div className="h-20 flex items-center justify-center">
                     <div className={`flex items-center gap-3 transition-all duration-300 ${isHovered ? 'px-6 w-full justify-start' : 'justify-center'}`}>
                         <div className="w-10 h-10 bg-bottle-green rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-bottle-green/20 shrink-0">
                             E
@@ -77,8 +77,8 @@ export const Layout: React.FC = () => {
                                 to={item.path}
                                 onClick={() => setIsSidebarOpen(false)}
                                 className={`flex items-center gap-4 px-3 py-3 rounded-xl transition-all duration-200 group relative ${isActive
-                                    ? 'bg-bottle-green text-white shadow-md shadow-bottle-green/20'
-                                    : 'text-bottle-green hover:bg-green-50'
+                                    ? 'bg-bottle-green text-white shadow-lg shadow-bottle-green/30 translate-y-[-2px]'
+                                    : 'text-bottle-green hover:bg-white hover:shadow-md hover:translate-y-[-2px]'
                                     }`}
                             >
                                 <div className="shrink-0">
@@ -95,38 +95,38 @@ export const Layout: React.FC = () => {
                             </Link>
                         );
                     })}
-                </nav>
 
-                <div className="p-3 border-t border-gray-100 space-y-2 bg-gray-50/50">
-                    <div className={`flex items-center gap-4 px-3 py-2 ${isHovered ? 'justify-start' : 'justify-center'}`}>
-                        <AccessibilityMenu />
-                        <span className={`text-sm font-medium text-bottle-green whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
-                            Accessibilité
-                        </span>
+                    <div className="pt-4 mt-4 border-t border-gray-200/50">
+                        <div className={`flex items-center gap-4 px-3 py-2 rounded-xl transition-all duration-200 group relative text-bottle-green hover:bg-white hover:shadow-md hover:translate-y-[-2px] ${isHovered ? 'justify-start' : 'justify-center'}`}>
+                            <AccessibilityMenu />
+                            <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
+                                Accessibilité
+                            </span>
+                        </div>
+
+                        <button
+                            onClick={() => setIsPasswordModalOpen(true)}
+                            className={`flex items-center gap-4 px-3 py-3 w-full text-left text-bottle-green hover:bg-white hover:shadow-md hover:translate-y-[-2px] rounded-xl transition-all duration-200 ${!isHovered && 'justify-center'}`}
+                            title="Profil"
+                        >
+                            <User size={24} />
+                            <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
+                                Profil
+                            </span>
+                        </button>
+
+                        <button
+                            onClick={handleLogout}
+                            className={`flex items-center gap-4 px-3 py-3 w-full text-left text-red-600 hover:bg-white hover:shadow-md hover:translate-y-[-2px] rounded-xl transition-all duration-200 ${!isHovered && 'justify-center'}`}
+                            title="Déconnexion"
+                        >
+                            <LogOut size={24} />
+                            <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
+                                Déconnexion
+                            </span>
+                        </button>
                     </div>
-
-                    <button
-                        onClick={() => setIsPasswordModalOpen(true)}
-                        className={`flex items-center gap-4 px-3 py-3 w-full text-left text-bottle-green hover:bg-green-50 rounded-xl transition-colors ${!isHovered && 'justify-center'}`}
-                        title="Profil"
-                    >
-                        <User size={24} />
-                        <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
-                            Profil
-                        </span>
-                    </button>
-
-                    <button
-                        onClick={handleLogout}
-                        className={`flex items-center gap-4 px-3 py-3 w-full text-left text-red-600 hover:bg-red-50 rounded-xl transition-colors ${!isHovered && 'justify-center'}`}
-                        title="Déconnexion"
-                    >
-                        <LogOut size={24} />
-                        <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
-                            Déconnexion
-                        </span>
-                    </button>
-                </div>
+                </nav>
             </aside>
 
             {/* Main Content */}

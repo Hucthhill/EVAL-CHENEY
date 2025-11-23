@@ -11,6 +11,8 @@ interface EvaluationContextType {
     updateProfile: (field: keyof EvaluationData['profile'], value: string) => void;
     updateScore: (theme: keyof EvaluationData['evaluations'], subTheme: string, phase: Phase, score: number) => void;
     updateObservation: (phase: Phase, text: string) => void;
+    updateThemeObservation: (themeId: string, phase: Phase, field: 'capacities' | 'difficulties', text: string) => void;
+    validatePhase: (phase: Phase) => void;
     loadEvaluation: (id: string) => void;
     createNewEvaluation: () => void;
     deleteEvaluation: (id: string) => void;
@@ -107,6 +109,34 @@ export const EvaluationProvider: React.FC<{ children: ReactNode }> = ({ children
         }));
     };
 
+    const updateThemeObservation = (themeId: string, phase: Phase, field: 'capacities' | 'difficulties', text: string) => {
+        setData(prev => ({
+            ...prev,
+            themeObservations: {
+                ...prev.themeObservations,
+                [themeId]: {
+                    ...prev.themeObservations[themeId],
+                    [phase]: {
+                        ...prev.themeObservations[themeId]?.[phase] || { capacities: '', difficulties: '' },
+                        [field]: text
+                    }
+                }
+            },
+            updatedAt: new Date().toISOString()
+        }));
+    };
+
+    const validatePhase = (phase: Phase) => {
+        setData(prev => {
+            if (prev.validatedPhases.includes(phase)) return prev;
+            return {
+                ...prev,
+                validatedPhases: [...prev.validatedPhases, phase],
+                updatedAt: new Date().toISOString()
+            };
+        });
+    };
+
     return (
         <EvaluationContext.Provider value={{
             data,
@@ -115,6 +145,8 @@ export const EvaluationProvider: React.FC<{ children: ReactNode }> = ({ children
             updateProfile,
             updateScore,
             updateObservation,
+            updateThemeObservation,
+            validatePhase,
             loadEvaluation,
             createNewEvaluation,
             deleteEvaluation,

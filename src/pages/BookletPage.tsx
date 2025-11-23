@@ -193,7 +193,7 @@ export const BookletPage: React.FC = () => {
                     </div>
 
                     {/* Scores Table */}
-                    <table className="w-full border-collapse border border-gray-800 text-sm">
+                    <table className="w-full border-collapse border border-gray-800 text-sm mb-8">
                         <thead>
                             <tr className="bg-gray-100">
                                 <th className="border border-gray-800 p-2 text-left">Sous-Thèmes</th>
@@ -216,6 +216,25 @@ export const BookletPage: React.FC = () => {
                             })}
                         </tbody>
                     </table>
+
+                    {/* Final Observations */}
+                    <div className="border border-gray-800 p-4 rounded bg-gray-50">
+                        <h3 className="font-bold border-b border-gray-800 pb-2 mb-4">Observations Finales (Phase 3)</h3>
+                        <div className="grid grid-cols-2 gap-8">
+                            <div>
+                                <strong className="block mb-2 text-sm uppercase text-gray-600">Principales capacités identifiées :</strong>
+                                <p className="text-sm min-h-[60px]">
+                                    {data.themeObservations?.[theme.id]?.phase3?.capacities || 'Aucune observation saisie.'}
+                                </p>
+                            </div>
+                            <div>
+                                <strong className="block mb-2 text-sm uppercase text-gray-600">Principales difficultés rencontrées :</strong>
+                                <p className="text-sm min-h-[60px]">
+                                    {data.themeObservations?.[theme.id]?.phase3?.difficulties || 'Aucune observation saisie.'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ))}
 

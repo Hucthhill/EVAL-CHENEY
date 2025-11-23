@@ -24,6 +24,11 @@ export interface InternProfile {
     deepeningStage?: string;
 }
 
+export interface ThemeObservation {
+    capacities: string;
+    difficulties: string;
+}
+
 export interface EvaluationData {
     id: string;
     createdAt: string;
@@ -37,6 +42,12 @@ export interface EvaluationData {
         productivity: ThemeEvaluation; // Productivité/technicité
         learning: ThemeEvaluation; // Acquis et aptitude
     };
+    themeObservations: {
+        [themeId: string]: {
+            [key in Phase]?: ThemeObservation;
+        };
+    };
+    validatedPhases: Phase[];
     observations: {
         [key in Phase]?: string;
     };
@@ -60,5 +71,7 @@ export const INITIAL_EVALUATION_DATA: EvaluationData = {
         productivity: {},
         learning: {},
     },
+    themeObservations: {},
+    validatedPhases: [],
     observations: {},
 };
