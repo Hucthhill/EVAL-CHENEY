@@ -182,45 +182,87 @@ export const BookletPage: React.FC = () => {
             {/* Theme Pages */}
             {ALL_THEMES.map((theme) => (
                 <div key={theme.id}>
-                    {/* Page 1: Charts (Vertical Stack) */}
+                    {/* Page 1: Legend + Phase 1 Chart */}
                     <div className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after flex flex-col">
                         <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
-                            Thème évalué: {theme.title} - Graphiques
+                            Thème évalué: {theme.title}
                         </h2>
 
-                        <div className="flex-1 flex flex-col justify-between gap-4">
-                            {/* Phase 1 Radar */}
-                            <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
-                                <button
-                                    onClick={() => openModal(`${theme.title} - Phase 1`, theme.subThemes.map(s => s.label), getChartData(theme.id, 'phase1'))}
-                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
-                                    title="Agrandir"
-                                >
-                                    <Maximize2 size={20} />
-                                </button>
-                                <h3 className="text-center font-bold mb-2 text-lg">Phase 1: Pré-requis</h3>
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <div className="w-full h-[90%]">
-                                        <SkillRadar
-                                            labels={theme.subThemes.map(s => s.label)}
-                                            dataPhase1={getChartData(theme.id, 'phase1')}
-                                        />
-                                    </div>
+                        {/* Scoring Legend */}
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-800 mb-6">
+                            <h4 className="font-bold text-gray-800 border-b border-gray-800 pb-2 mb-3">Échelle d'évaluation :</h4>
+                            <div className="grid gap-2 text-sm">
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">7</span>
+                                    <span className="text-gray-700">Capacité maîtrisée et mise en œuvre dans le milieu ordinaire</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">6</span>
+                                    <span className="text-gray-700">Capacité maîtrisée et à mettre en œuvre en milieu ordinaire avec suivi ESAT</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">5</span>
+                                    <span className="text-gray-700">Capacité acquise et en cours de mise en œuvre</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">4</span>
+                                    <span className="text-gray-700">Capacité en cours d'acquisition et non mis en œuvre seule</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">3</span>
+                                    <span className="text-gray-700">Capacité non acquise, a la volonté mais ne peut pas</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">2</span>
+                                    <span className="text-gray-700">Capacité non acquise car ne s'implique pas</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">1</span>
+                                    <span className="text-gray-700">Capacité non constaté</span>
                                 </div>
                             </div>
+                        </div>
 
+                        {/* Phase 1 Radar */}
+                        <div className="flex-1 border border-gray-800 p-4 rounded flex flex-col items-center relative group">
+                            <button
+                                onClick={() => openModal(`${theme.title} - Phase 1`, theme.subThemes.map(s => s.label), getChartData(theme.id, 'phase1'))}
+                                className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden z-10"
+                                title="Agrandir"
+                            >
+                                <Maximize2 size={20} />
+                            </button>
+                            <h3 className="text-center font-bold mb-4 text-lg">Phase 1: Pré-requis</h3>
+                            <div className="w-full flex-1 flex items-center justify-center">
+                                <div className="w-full h-full">
+                                    <SkillRadar
+                                        labels={theme.subThemes.map(s => s.label)}
+                                        dataPhase1={getChartData(theme.id, 'phase1')}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Page 2: Phase 2 & Phase 3 Charts */}
+                    <div className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after flex flex-col">
+                        <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
+                            Thème évalué: {theme.title} - Graphiques (suite)
+                        </h2>
+
+                        <div className="flex-1 flex flex-col gap-6">
                             {/* Phase 2 Radar */}
-                            <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
+                            <div className="flex-1 border border-gray-800 p-4 rounded flex flex-col items-center relative group">
                                 <button
                                     onClick={() => openModal(`${theme.title} - Phase 2`, theme.subThemes.map(s => s.label), undefined, getChartData(theme.id, 'phase2'))}
-                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
+                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden z-10"
                                     title="Agrandir"
                                 >
                                     <Maximize2 size={20} />
                                 </button>
-                                <h3 className="text-center font-bold mb-2 text-lg">Phase 2: Découverte</h3>
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <div className="w-full h-[90%]">
+                                <h3 className="text-center font-bold mb-4 text-lg">Phase 2: Découverte</h3>
+                                <div className="w-full flex-1 flex items-center justify-center">
+                                    <div className="w-full h-full">
                                         <SkillRadar
                                             labels={theme.subThemes.map(s => s.label)}
                                             dataPhase2={getChartData(theme.id, 'phase2')}
@@ -230,17 +272,17 @@ export const BookletPage: React.FC = () => {
                             </div>
 
                             {/* Phase 3 Radar */}
-                            <div className="flex-1 border p-4 rounded flex flex-col items-center relative group min-h-[250px]">
+                            <div className="flex-1 border border-gray-800 p-4 rounded flex flex-col items-center relative group">
                                 <button
                                     onClick={() => openModal(`${theme.title} - Phase 3`, theme.subThemes.map(s => s.label), undefined, undefined, getChartData(theme.id, 'phase3'))}
-                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden"
+                                    className="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 hover:text-bottle-green transition-colors print:hidden z-10"
                                     title="Agrandir"
                                 >
                                     <Maximize2 size={20} />
                                 </button>
-                                <h3 className="text-center font-bold mb-2 text-lg">Phase 3: Approfondissement</h3>
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <div className="w-full h-[90%]">
+                                <h3 className="text-center font-bold mb-4 text-lg">Phase 3: Approfondissement</h3>
+                                <div className="w-full flex-1 flex items-center justify-center">
+                                    <div className="w-full h-full">
                                         <SkillRadar
                                             labels={theme.subThemes.map(s => s.label)}
                                             dataPhase3={getChartData(theme.id, 'phase3')}
@@ -251,7 +293,7 @@ export const BookletPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Page 2: Details (Table & Observations) */}
+                    {/* Page 3: Table & Observations */}
                     <div className="min-h-[29.7cm] p-8 border-b-2 border-gray-100 print:border-none page-break-after">
                         <h2 className="text-2xl font-bold mb-6 border-b-2 border-gray-800 pb-2">
                             Thème évalué: {theme.title} - Détails
