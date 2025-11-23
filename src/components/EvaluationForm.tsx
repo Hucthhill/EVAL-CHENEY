@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useEvaluation } from '../store/EvaluationContext';
-import type { Phase, ThemeEvaluation } from '../types';
+import type { Phase } from '../types';
 import { clsx } from 'clsx';
 import { ChevronDown, ChevronRight, Lock, Unlock, CheckCircle } from 'lucide-react';
 
@@ -12,8 +12,8 @@ interface EvaluationFormProps {
 
 export const EvaluationForm: React.FC<EvaluationFormProps> = ({ themeId, title, subThemes }) => {
     const { data, updateScore, updateThemeObservation, validatePhase } = useEvaluation();
-    const themeData = data.evaluations[themeId] as ThemeEvaluation;
-    const themeObs = data.themeObservations[themeId] || {};
+    const themeData = data.evaluations?.[themeId] || {};
+    const themeObs = data.themeObservations?.[themeId] || {};
     const [isLocked, setIsLocked] = useState(false);
     const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 

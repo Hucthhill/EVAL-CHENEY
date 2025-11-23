@@ -29,7 +29,9 @@ export const EvaluationProvider: React.FC<{ children: ReactNode }> = ({ children
     // Load list on mount
     useEffect(() => {
         const list = storageService.getAll();
-        setEvaluationsList(list);
+        // Ensure all items in list have the new structure
+        const migratedList = list.map(item => ({ ...INITIAL_EVALUATION_DATA, ...item }));
+        setEvaluationsList(migratedList);
         setIsLoading(false);
     }, []);
 
@@ -58,7 +60,8 @@ export const EvaluationProvider: React.FC<{ children: ReactNode }> = ({ children
     const loadEvaluation = (id: string) => {
         const evaluation = storageService.getById(id);
         if (evaluation) {
-            setData(evaluation);
+            // Merge with initial data to ensure new fields (like themeObservations) exist
+            setData({ ...INITIAL_EVALUATION_DATA, ...evaluation });
         }
     };
 
