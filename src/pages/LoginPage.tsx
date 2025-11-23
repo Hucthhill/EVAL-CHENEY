@@ -25,8 +25,8 @@ export const LoginPage: React.FC = () => {
                     <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-400/30">
                         <Lock className="text-blue-400" size={32} />
                     </div>
-                    <h1 className="text-2xl font-bold text-white">ESAT Eval</h1>
-                    <p className="text-blue-200 mt-2">Connexion sécurisée</p>
+                    <h1 className="text-2xl font-bold text-white">E-VAL</h1>
+                    <p className="text-blue-200 mt-2">outil d'évaluation professionnelle EPNAK</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -57,8 +57,10 @@ export const LoginPage: React.FC = () => {
                     </button>
                 </form>
 
-                <div className="mt-8 text-center text-xs text-blue-300/50">
-                    Centre d'Évaluation Professionnelle - ESAT de Cheney
+                <div className="mt-8 bg-white rounded-xl p-4 text-center">
+                    <p className="text-sm font-medium text-gray-600 mb-2">propulsé par CAMPUS EPNAK</p>
+                    <img src="/logo_campus_epnak.png" alt="Campus EPNAK" className="h-12 mx-auto mb-2 object-contain" />
+                    <p className="text-xs text-gray-400">version Alpha test 0.1.251123</p>
                 </div>
             </div>
         </div>

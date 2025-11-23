@@ -34,7 +34,7 @@ export const Layout: React.FC = () => {
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-bottle-green dark:text-green-400">
                         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
-                    <div className="font-bold text-xl tracking-tight text-bottle-green dark:text-green-400">ESAT Eval</div>
+                    <div className="font-bold text-xl tracking-tight text-bottle-green dark:text-green-400">E-VAL</div>
                 </div>
             </div>
 
@@ -63,7 +63,7 @@ export const Layout: React.FC = () => {
                             E
                         </div>
                         <span className={`font-bold text-xl tracking-tight text-bottle-green dark:text-green-400 whitespace-nowrap overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
-                            ESAT Eval
+                            E-VAL
                         </span>
                     </div>
                 </div>
