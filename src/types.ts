@@ -25,6 +25,10 @@ export interface InternProfile {
 }
 
 export interface EvaluationData {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    status: 'draft' | 'completed';
     profile: InternProfile;
     evaluations: {
         communication: ThemeEvaluation;
@@ -40,6 +44,10 @@ export interface EvaluationData {
 }
 
 export const INITIAL_EVALUATION_DATA: EvaluationData = {
+    id: '',
+    createdAt: '',
+    updatedAt: '',
+    status: 'draft',
     profile: {
         firstName: '',
         lastName: '',
